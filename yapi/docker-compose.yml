@@ -1,0 +1,30 @@
+version: '3.3'
+services:
+  yapi:
+    image: mrjin/yapi:latest
+    container_name: yapi
+    restart: always
+    environment:
+      - VERSION=1.10.2
+      - HOME=/home
+      - PORT=3000
+      - ADMIN_EMAIL=admin@admin.com
+      - DB_SERVER=mongo
+      - DB_NAME=yapi
+      - DB_PORT=27017
+    entrypoint: "bash /wait-for-it.sh mongo:27017 -- entrypoint.sh"
+    depends_on:
+      - mongo
+    ports:
+      - 3000:3000
+    volumes:
+      - $PWD/data/log:/home/log
+
+  mongo:
+    image: mongo:3.5
+    container_name: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - $PWD/data/mongodb:/data/db

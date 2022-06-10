@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+
+    mysql-exporter:
+        #image: prom/mysqld-exporter
+        #image: prom/mysqld-exporter:v0.13.0
+        image: prom/mysqld-exporter:v0.12.1
+        ports:
+            - 9104:9104
+        environment:
+            #DATA_SOURCE_NAME: "root:123456@(192.168.111.128:3306)/"
+            DATA_SOURCE_NAME: "root:uHHsWrf7mK@(192.168.7.92:3306)/"
+        restart: always
+

@@ -1,0 +1,17 @@
+version: '3'
+ 
+services:
+  rabbitmq:
+    image: rabbitmq:3.7.5-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - $PWD/data/rabbitmq:/var/lib/rabbitmq/mnesia
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_ERLANG_COOKIE: rec123456
+      RABBITMQ_DEFAULT_VHOST: /

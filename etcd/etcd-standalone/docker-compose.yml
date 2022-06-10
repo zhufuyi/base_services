@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  etcd:
+    image: quay.io/coreos/etcd:latest
+    container_name: etcd-standalone
+    restart: always
+    environment:
+      - ETCDCTL_API=3
+    command:
+      - etcd
+      - --name=etcd-standalone
+      - --data-dir=/etcd-data
+      - --listen-client-urls=http://0.0.0.0:2379
+      - --advertise-client-urls=http://0.0.0.0:2379
+      - --listen-peer-urls=http://0.0.0.0:2380
+      - --initial-advertise-peer-urls=http://0.0.0.0:2380
+      #- --initial-cluster=etcd-standalone=http://0.0.0.0:2380
+    ports:
+      - 2379:2379
+      - 2380:2380
+    volumes:
+      - $PWD/etcd-data:/etcd-data

@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+
+    rabbitmq-exporter:
+        image: kbudde/rabbitmq-exporter:latest
+        ports:
+            - 9419:9419
+        environment:
+            - RABBIT_URL=http://192.168.111.128:15672
+            - RABBIT_USER=guest
+            - RABBIT_PASSWORD=guest
+        restart: always
+

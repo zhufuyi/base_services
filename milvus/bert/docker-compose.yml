@@ -1,0 +1,13 @@
+version: '3.5'
+
+services:
+  bert:
+    image: vison/bert-serving:1.15 
+    container_name: bert-serving
+    restart: always
+    command: bert-serving-start -max_seq_len=100 -num_worker=2 -model_dir=/app/chinese_L-12_H-768_A-12 -http_port 8125
+    ports:
+      - 5555:5555
+      - 5556:5556
+      - 8125:8125
+

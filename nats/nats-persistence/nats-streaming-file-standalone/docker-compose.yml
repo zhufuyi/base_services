@@ -1,0 +1,15 @@
+version: '3'
+ 
+services:
+  nats-streaming:
+    image: nats-streaming:latest
+    restart: always
+    command: 
+      - "-c"
+      - "/nats-streaming.conf"
+    ports:
+      - 4222:4222
+      - 8222:8222
+    volumes:
+      - $PWD/datastore:/datastore
+      - $PWD/nats-streaming.conf:/nats-streaming.conf

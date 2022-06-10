@@ -1,0 +1,31 @@
+
+@version: 3.29
+@include "scl.conf"
+
+source s_local {
+        internal();
+};
+
+source s_network {
+        default-network-drivers(
+                # NOTE: TLS support
+                #
+                # the default-network-drivers() source driver opens the TLS
+                # enabled ports as well, however without an actual key/cert
+                # pair they will not operate and syslog-ng would display a
+                # warning at startup.
+                #
+                #tls(key-file("/path/to/ssl-private-key") cert-file("/path/to/ssl-cert"))
+        );
+};
+
+destination d_loki {
+        syslog("promtail" transport("tcp") port("1514"));
+};
+
+log {
+        source(s_local);
+        source(s_network);
+        destination(d_loki);
+};
+

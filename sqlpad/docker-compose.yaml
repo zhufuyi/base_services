@@ -1,0 +1,14 @@
+version: '3.5'
+services:
+  sqlpad:
+    container_name: sqlpad
+    image: "sqlpad/sqlpad"
+    restart: always
+    ports:
+      - 13000:3000
+    environment:
+      - SQLPAD_ADMIN=admin
+      - SQLPAD_ADMIN_PASSWORD=admin
+    volumes:
+      - $PWD/sqlpad:/var/lib/sqlpad
+

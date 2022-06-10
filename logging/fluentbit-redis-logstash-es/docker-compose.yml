@@ -1,0 +1,88 @@
+version: '3'
+
+services:
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.2.0
+    restart: always
+    environment:
+      - discovery.type=single-node
+      # 鉴权配置，如果想取消鉴权，注释下面4行配置
+      - ELASTIC_PASSWORD=1q2w3e4r
+      - xpack.security.enabled=true 
+      - http.cors.enabled=true 
+      - http.cors.allow-origin="*"
+    volumes:
+      - $PWD/es-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - eflk-net
+
+  kibana:
+    container_name: kibana
+    image: kibana:7.2.0
+    restart: always
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: elastic
+      ELASTICSEARCH_PASSWORD: 1q2w3e4r
+    ports:
+      - "5601:5601"
+    depends_on: 
+      - elasticsearch
+    networks: 
+      - eflk-net
+
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    ports:
+    - 16379:6379
+    volumes:
+    - $PWD/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    - $PWD/redis-data:/data
+    networks: 
+      - eflk-net
+
+  # fluent bit采集docker日志转发到redis的链表(logstash)
+  # fluent bit官方不支持redis输出，要支持redis输出，需要自己构建镜像
+  # 从gitHub下载https://github.com/majst01/fluent-bit-go-redis-output源码，修改fluent-bit和golangbanben，docker build -t zhufuyi/fluent-bit-redis:1.2.2
+  fluent-bit:
+    image: zhufuyi/fluent-bit-redis:1.2.2
+    container_name: fluent-bit
+    restart: always
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers
+      - $PWD/fluent-bit/config/:/fluent-bit/etc/
+    depends_on:
+      - redis
+    networks: 
+      - eflk-net
+
+  # logstash从redis的链表(logstash)取出数据，然后写入es
+  logstash:
+    image: logstash:7.2.0
+    restart: always
+    container_name: logstash
+    ports:
+    - 45000:5000
+    - 49600:9600
+    volumes:
+    - $PWD/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+    - $PWD/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      - redis
+      - elasticsearch
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks: 
+      - eflk-net
+
+networks:
+  eflk-net:
+    driver: bridge

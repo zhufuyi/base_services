@@ -1,0 +1,13 @@
+version: "3"
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: "redis-app"
+    command: redis-server /usr/local/etc/redis/redis.conf
+    ports:
+    - 6379:6379
+    volumes:
+    - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    - $PWD/data:/data
+    

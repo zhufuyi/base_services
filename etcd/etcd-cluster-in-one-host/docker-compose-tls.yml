@@ -1,0 +1,114 @@
+version: '3'
+
+services:
+  etcd1:
+    image: quay.io/coreos/etcd
+    container_name: etcd1
+    restart: always
+    environment:
+      - ETCDCTL_API=3
+    command:
+      - etcd
+      - --name=etcd1
+      - --data-dir=/etcd-data
+      - --listen-peer-urls=https://0.0.0.0:2380
+      - --listen-client-urls=https://0.0.0.0:2379
+      - --initial-advertise-peer-urls=https://etcd1:2380
+      - --advertise-client-urls=https://0.0.0.0:2379  
+      - --initial-cluster-token=etcd-cluster
+      - --initial-cluster=etcd1=https://etcd1:2380,etcd2=https://etcd2:2380,etcd3=https://etcd3:2380
+      - --initial-cluster-state=new
+      # client端证书
+      - --client-cert-auth
+      - --trusted-ca-file=/etcd-certs/ca.pem
+      - --cert-file=/etcd-certs/etcd1.pem
+      - --key-file=/etcd-certs/etcd1-key.pem
+      # peer端证书
+      - --peer-client-cert-auth
+      - --peer-trusted-ca-file=/etcd-certs/ca.pem
+      - --peer-cert-file=/etcd-certs/peer-etcd1.pem
+      - --peer-key-file=/etcd-certs/peer-etcd1-key.pem
+    ports:
+      - 23791:2379
+      - 23801:2380
+    volumes:
+      - $PWD/data/etcd1:/etcd-data
+      - $PWD/certs:/etcd-certs
+    networks:
+      - etcd-net
+
+  etcd2:
+    image: quay.io/coreos/etcd
+    container_name: etcd2
+    restart: always
+    environment:
+      - ETCDCTL_API=3
+    command:
+      - etcd
+      - --name=etcd2
+      - --data-dir=/etcd-data
+      - --listen-peer-urls=https://0.0.0.0:2380
+      - --listen-client-urls=https://0.0.0.0:2379
+      - --initial-advertise-peer-urls=https://etcd2:2380
+      - --advertise-client-urls=https://0.0.0.0:2379
+      - --initial-cluster-token=etcd-cluster
+      - --initial-cluster=etcd1=https://etcd1:2380,etcd2=https://etcd2:2380,etcd3=https://etcd3:2380
+      - --initial-cluster-state=new
+      # client端证书
+      - --client-cert-auth
+      - --trusted-ca-file=/etcd-certs/ca.pem
+      - --cert-file=/etcd-certs/etcd2.pem
+      - --key-file=/etcd-certs/etcd2-key.pem
+      # peer端证书
+      - --peer-client-cert-auth
+      - --peer-trusted-ca-file=/etcd-certs/ca.pem
+      - --peer-cert-file=/etcd-certs/peer-etcd2.pem
+      - --peer-key-file=/etcd-certs/peer-etcd2-key.pem
+    ports:
+      - 23792:2379
+      - 23802:2380
+    volumes:
+      - $PWD/data/etcd2:/etcd-data
+      - $PWD/certs:/etcd-certs
+    networks:
+      - etcd-net
+
+  etcd3:
+    image: quay.io/coreos/etcd
+    container_name: etcd3
+    restart: always
+    environment:
+      - ETCDCTL_API=3
+    command:
+      - etcd
+      - --name=etcd3
+      - --data-dir=/etcd-data
+      - --listen-peer-urls=https://0.0.0.0:2380
+      - --listen-client-urls=https://0.0.0.0:2379
+      - --initial-advertise-peer-urls=https://etcd3:2380
+      - --advertise-client-urls=https://0.0.0.0:2379
+      - --initial-cluster-token=etcd-cluster
+      - --initial-cluster=etcd1=https://etcd1:2380,etcd2=https://etcd2:2380,etcd3=https://etcd3:2380
+      - --initial-cluster-state=new
+      # client端证书
+      - --client-cert-auth
+      - --trusted-ca-file=/etcd-certs/ca.pem
+      - --cert-file=/etcd-certs/etcd3.pem
+      - --key-file=/etcd-certs/etcd3-key.pem
+      # peer端证书
+      - --peer-client-cert-auth
+      - --peer-trusted-ca-file=/etcd-certs/ca.pem
+      - --peer-cert-file=/etcd-certs/peer-etcd3.pem
+      - --peer-key-file=/etcd-certs/peer-etcd3-key.pem
+    ports:
+      - 23793:2379
+      - 23803:2380
+    volumes:
+      - $PWD/data/etcd3:/etcd-data
+      - $PWD/certs:/etcd-certs
+    networks:
+      - etcd-net
+
+networks:
+  etcd-net:
+

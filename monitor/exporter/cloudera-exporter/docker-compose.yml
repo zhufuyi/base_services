@@ -1,0 +1,11 @@
+version: '3'
+services:
+  monitor-query:
+    image: cloudera-exporte:latest
+    container_name: cloudera-exporter
+    volumes:
+      - $PWD/config:/app/config
+    restart: always
+    ports:
+      - "9229:9229"
+

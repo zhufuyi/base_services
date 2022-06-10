@@ -1,0 +1,60 @@
+version: '3.7'
+
+services:
+  node1:
+    image: nats-streaming:latest
+    restart: always
+    command: 
+      - "--config"
+      - "/nats.conf"
+      - "--cluster_log_path"
+      - "/clusterLog"
+    ports:
+      - 4221:4222
+      - 8221:8222
+    volumes:
+      - $PWD/nats-node1.conf:/nats.conf
+      - $PWD/data-node1/datastore:/datastore
+      - $PWD/data-node1/clusterLog:/clusterLog
+    networks:
+      - nats-net
+
+  node2:
+    image: nats-streaming:latest
+    restart: always
+    command: 
+      - "--config"
+      - "/nats.conf"
+      - "--cluster_log_path"
+      - "/clusterLog"
+    ports:
+      - 4222:4222
+      - 8222:8222
+    volumes:
+      - $PWD/nats-node2.conf:/nats.conf
+      - $PWD/data-node2/datastore:/datastore
+      - $PWD/data-node2/clusterLog:/clusterLog
+    networks:
+      - nats-net
+
+  node3:
+    image: nats-streaming:latest
+    restart: always
+    command: 
+      - "--config"
+      - "/nats.conf"
+      - "--cluster_log_path"
+      - "/clusterLog"
+    ports:
+      - 4223:4222
+      - 8223:8222
+    volumes:
+      - $PWD/nats-node3.conf:/nats.conf
+      - $PWD/data-node3/datastore:/datastore
+      - $PWD/data-node3/clusterLog:/clusterLog
+    networks:
+      - nats-net
+
+networks:
+  nats-net:
+    driver: bridge

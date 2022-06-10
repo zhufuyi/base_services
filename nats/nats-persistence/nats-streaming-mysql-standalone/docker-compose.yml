@@ -1,0 +1,42 @@
+version: '3'
+ 
+services:
+  nats-streaming:
+    image: nats-streaming:latest
+    restart: always
+    command: 
+      - "--sql_driver"
+      - "mysql"
+      - "--sql_source"
+      - "root:123456@(mysql-8.0:3306)/nss"
+      - "-c"
+      - "/nats-streaming.conf"
+    ports:
+      - 4222:4222
+      - 8222:8222
+    volumes:
+      - $PWD/nats-streaming.conf:/nats-streaming.conf
+    depends_on:
+      - mysql-8.0
+    networks:
+      - nats-net
+
+  mysql-8.0:
+    image: mysql:8.0
+    restart: always
+    command: 
+      - "--default-authentication-plugin=mysql_native_password"
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - $PWD/mysql-data:/var/lib/mysql
+      - $PWD/nats-streaming-server.sql:/docker-entrypoint-initdb.d/nats-streaming-server.sql
+    networks:
+      - nats-net
+
+networks:
+  nats-net:
+    driver: bridge
+

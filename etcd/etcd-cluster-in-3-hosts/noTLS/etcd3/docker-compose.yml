@@ -1,0 +1,27 @@
+version: "3"
+  
+services:
+  etcd:
+    image: quay.io/coreos/etcd
+    container_name: etcd3
+    restart: always
+    environment:
+      - ETCDCTL_API=3
+    command: 
+      - etcd
+      - --name=etcd3
+      - --data-dir=/etcd-data
+      - --listen-client-urls=http://192.168.3.103:2379
+      - --advertise-client-urls=http://192.168.3.103:2379
+      - --listen-peer-urls=http://192.168.3.103:2380
+      - --initial-advertise-peer-urls=http://192.168.3.103:2380
+      - --initial-cluster=etcd1=http://192.168.3.101:2380,etcd2=http://192.168.3.102:2380,etcd3=http://192.168.3.103:2380
+      - --initial-cluster-token=etcd-cluster
+      - --initial-cluster-state=new
+    ports:
+      - 2379:2379
+      - 2380:2380
+    volumes:
+      - $PWD/etcd-data:/etcd-data
+    network_mode: "host"
+

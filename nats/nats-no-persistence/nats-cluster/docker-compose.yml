@@ -1,0 +1,79 @@
+version: "3"
+
+services: 
+  nats-worker-1: 
+    image: nats:2.0.0
+    restart: always
+    command: 
+      - "-c"
+      - "/nats.conf"
+    networks:
+      - nats-net
+    volumes:
+      - $PWD/nats1.conf:/nats.conf
+    ports:
+      - 14222:4222
+      - 18222:8222
+
+  nats-worker-2: 
+    image: nats:2.0.0
+    restart: always
+    command: 
+      - "-c"
+      - "/nats.conf"
+    networks:
+      - nats-net
+    volumes:
+      - $PWD/nats2.conf:/nats.conf
+    ports:
+      - 24222:4222
+      - 28222:8222
+
+  nats-worker-3: 
+    image: nats:2.0.0
+    restart: always
+    command: 
+      - "-c"
+      - "/nats.conf"
+    networks:
+      - nats-net
+    volumes:
+      - $PWD/nats3.conf:/nats.conf
+    ports:
+      - 34222:4222
+      - 38222:8222
+
+  monitoring-nats1:
+    image: rhaziel/natsboard:secondwind
+    restart: always
+    environment:
+      NATS_MONITOR_URL: http://nats-worker-1:8222
+    ports:
+      - 3001:3000
+    networks:
+      - nats-net
+
+  monitoring-nats2:
+    image: rhaziel/natsboard:secondwind
+    restart: always
+    environment:
+      NATS_MONITOR_URL: http://nats-worker-2:8222
+    ports:
+      - 3002:3000
+    networks:
+      - nats-net
+
+  monitoring-nats3:
+    image: rhaziel/natsboard:secondwind
+    restart: always
+    environment:
+      NATS_MONITOR_URL: http://nats-worker-2:8222
+    ports:
+      - 3003:3000
+    networks:
+      - nats-net
+
+networks: 
+  nats-net:
+    driver: bridge
+

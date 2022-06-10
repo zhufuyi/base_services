@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+    process-exporter:
+        image: ncabatoff/process-exporter:0.7.5
+        volumes:
+            - /proc:/host/proc
+            - $PWD/config/process.yml:/config/process.yml
+        command:
+            - '--procfs=/host/proc'
+            - '--config.path=/config/process.yml'
+        ports:
+            - 9256:9256
+        restart: always
+

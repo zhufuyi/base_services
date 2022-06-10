@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+  node-exporter:
+    image: prom/node-exporter:v1.2.2
+    container_name: node-exporter
+    command:
+      - '--path.rootfs=/host'
+    #network_mode: host
+    pid: host
+    restart: always
+    ports:
+      - 9100:9100
+    volumes:
+      - '/:/host:ro,rslave'

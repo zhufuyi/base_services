@@ -1,0 +1,57 @@
+server:
+  http_listen_port: 3101
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/promtail/positions.yaml
+  sync_period: 10s #10秒钟同步一次
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # 指定本地文件
+  - job_name: syslog_messages
+    static_configs:
+    - targets:
+        - syslog
+      labels:
+        job: messages_log
+        app: messages
+        #__path__: /var/log/*log
+        __path__: /var/log/messages
+
+  - job_name: syslog_secure
+    static_configs:
+    - targets:
+        - syslog
+      labels:
+        job: secure_log
+        app: secure
+        __path__: /var/log/secure
+
+
+  # 抓取指定本地目录
+#  - job_name: journal
+#    journal:
+#      json: false
+#      max_age: 12h
+#      path: /var/log/journal
+#      labels:
+#        job: systemd-journal
+#    relabel_configs:
+#      - source_labels: ['__journal__systemd_unit']
+#        target_label: 'unit'
+
+  # 从tcp流接收日志
+#  - job_name: syslog
+#    syslog:
+#      listen_address: 0.0.0.0:1514
+#      idle_timeout: 60s
+#      label_structured_data: yes
+#      labels:
+#        job: "syslog"
+#    relabel_configs:
+#      - source_labels: ['__syslog_message_hostname']
+#        target_label: 'host'
+

@@ -1,0 +1,60 @@
+version: "3.4"
+
+#x-logging:
+#  &loki-logging
+#  driver: loki
+#  options:
+#    loki-url: "http://192.168.111.128:3100/loki/api/v1/push"
+#    max-size: "50m"
+#    max-file: "10"
+
+services:
+  loki:
+    image: grafana/loki:2.3.0
+    container_name: loki
+    restart: always
+    ports:
+      - "3100:3100"
+    volumes:
+      - $PWD/local-config.yaml:/etc/loki/local-config.yaml
+      - /etc/localtime:/etc/localtime
+      - $PWD/loki-rules:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+#    logging: *loki-logging
+    networks:
+      - loki-net
+
+  loki-canary:
+    image: grafana/loki-canary:2.3.0
+    container_name: loki-canary
+    restart: always
+    ports:
+      - "3500:3500"
+    volumes:
+      - /etc/localtime:/etc/localtime
+    command: -addr=loki:3100
+#    logging: *loki-logging
+    depends_on:
+      - loki
+    networks:
+      - loki-net
+
+  promtail:
+    image: grafana/promtail:2.3.0
+    container_name: promtail
+    restart: always
+    ports:
+      - "3101:3101"
+    volumes:
+      - $PWD/promtail-config.yaml:/etc/promtail/config.yml
+      - /etc/localtime:/etc/localtime
+      - $PWD/promtail-positions/:/tmp/promtail/
+      - /var/log/:/var/log/
+    command: -config.file=/etc/promtail/config.yml
+#    logging: *loki-logging
+    networks:
+      - loki-net
+
+networks:
+  loki-net:
+

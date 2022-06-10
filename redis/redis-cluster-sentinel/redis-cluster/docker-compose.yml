@@ -1,0 +1,36 @@
+version: '3'
+services:
+  master:
+    container_name: redis-master
+    image: redis:6.2.6
+    restart: always
+    command: redis-server  --requirepass 123456  --masterauth 123456
+    volumes:
+      - $PWD/marster:/data
+    ports:
+      - 6381:6379
+
+  slave1:
+    container_name: redis-slave-1
+    image: redis:6.2.6
+    restart: always
+    command: redis-server --slaveof redis-master 6379 --masterauth 123456 --requirepass 123456
+    volumes:
+      - $PWD/slave1:/data    
+    ports:
+      - 6382:6379
+
+  slave2:
+    container_name: redis-slave-2
+    image: redis:6.2.6
+    restart: always
+    command: redis-server --slaveof redis-master 6379 --masterauth 123456 --requirepass 123456
+    volumes:
+      - $PWD/slave2:/data    
+    ports:
+      - 6383:6379
+
+networks:
+  default:
+    driver: bridge
+    name: redis-net

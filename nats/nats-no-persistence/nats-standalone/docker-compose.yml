@@ -1,0 +1,35 @@
+version: '3'
+ 
+services:
+  nats-server:
+    container_name: nats-server
+    image: nats:2.0.0
+    restart: always
+    command: 
+      - "-c"
+      - "/nats.conf"
+    volumes:
+      - $PWD/nats.conf:/nats.conf
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    networks:
+      - nats-net
+
+  # nats监控面板
+  natsboard:
+    container_name: natsboard
+    image: rhaziel/natsboard:secondwind
+    restart: always
+    environment:
+      NATS_MONITOR_URL: http://nats-server:8222
+    ports:
+      - "33000:3000"
+    depends_on:
+      - nats-server
+    networks:
+      - nats-net
+
+networks:
+  nats-net:
+    driver: bridge

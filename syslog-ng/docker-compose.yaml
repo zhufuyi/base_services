@@ -1,0 +1,19 @@
+version: "3.4"
+
+services:
+  syslog-ng:
+    command: -edv
+    container_name: syslog-ng
+    image: balabit/syslog-ng:3.31.2
+    ports:
+    - protocol: udp
+      published: 514
+      target: 514
+    - protocol: tcp
+      published: 601
+      target: 601
+    restart: always
+    volumes:
+    - $PWD/syslog-ng.conf:/etc/syslog-ng/syslog-ng.conf
+    - /var/log:/var/log
+

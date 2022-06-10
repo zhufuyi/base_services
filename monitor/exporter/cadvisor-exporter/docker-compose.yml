@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+    cadvisor-exporter:
+        image: gcr.io/cadvisor/cadvisor:v0.37.5
+        container_name: cadvisor
+        # 设置容器权限为root
+        privileged: true
+        volumes:
+            - /:/rootfs
+            - /var/run:/var/run
+            - /sys:/sys
+            - /var/lib/docker/:/var/lib/docker
+            - /dev/disk/:/dev/disk
+            #- /:/rootfs:ro
+            #- /var/run:/var/run:ro
+            #- /sys:/sys:ro
+            #- /var/lib/docker/:/var/lib/docker:ro
+            #- /dev/disk/:/dev/disk:ro
+        ports:
+            - 9192:8080
+        restart: always
