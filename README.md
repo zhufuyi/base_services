@@ -78,6 +78,7 @@ source /usr/share/bash-completion/completions/docker-compose
   - [prometheus](monitor/prometheus)
   - [grafana](monitor/grafana)
   - [exporter](monitor/exporter)
+  - [thanos](monitor/thanos)
 - [mysql](mysql)
   - [mysql5.7](mysql/mysql5.7)
   - [mysql8.0](mysql/mysql8.0)
