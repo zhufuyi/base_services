@@ -1,0 +1,65 @@
+groups:
+- name: example
+  rules:
+
+  - alert: PrometheusReplicaDown
+    annotations:
+      message: 'Prometheus replica in cluster {{$labels.cluster}} has disappeared from Prometheus target discovery.'
+    expr: |
+      label_replace(
+                absent(sum(up{job="prometheus",
+                cluster="chicago",
+                instance=~".*:9090"}) by (job, cluster) == 2),
+                "cluster", "chicago", "",""
+          )
+      or
+      label_replace(
+                absent(sum(up{job="prometheus",
+                cluster="seattle", instance=~".*:9090"}) by (job, cluster) == 2),
+                "cluster", "seattle", "",""
+          )
+    for: 15s  # for demo purposes
+    labels:
+      severity: critical
+
+  # Alert for any instance that is unreachable for >2 minutes.
+  #- alert: service_down
+  #  expr: up == 0
+  #  for: 1m
+  #  labels:
+  #    severity: critical
+  #  annotations:
+  #    summary: "Instance {{ $labels.instance }} down"
+  #    description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 2 minutes."
+
+  - alert: high_load
+    expr: node_load1 > 0.5
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Instance {{ $labels.instance }} under high load"
+      description: "{{ $labels.instance }} of job {{ $labels.job }} is under high load."
+
+
+- name: hostUsageRate
+  rules:
+
+  - alert: cpu_use_high
+    expr: sum(avg without (cpu)(irate(node_cpu_seconds_total{mode!='idle'}[5m]))) by (instance) > 0.5
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Instance {{ $labels.instance }} CPU usgae high"
+      description: "{{ $labels.instance }} CPU usage above 50% (current value: {{ $value }})"
+
+  - alert: memory_se_high
+    expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.45
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Instance {{ $labels.instance }} MEM usgae high"
+      description: "{{ $labels.instance }} MEM usage above 45% (current value: {{ $value }})"
+

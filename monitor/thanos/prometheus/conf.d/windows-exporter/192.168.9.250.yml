@@ -1,0 +1,8 @@
+- targets: ['192.168.9.250:9182']
+  labels:
+    customer_id: '22'
+    company: 'deepexi'
+    enterprise: '2048'
+    environment: 'dev'
+    project: 'inner'
+    server_usage: 'all'

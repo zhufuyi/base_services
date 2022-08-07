@@ -1,0 +1,29 @@
+groups:
+- name: linux_cpu_usage__global__1626852948013684600
+  rules:
+  - alert: linux_cpu_usage__P2
+    expr: label_replace(topk(10,(100 - avg(irate(node_cpu_seconds_total{mode="idle"}[5m]))by
+      (instance) * 100)),"ip","$1","instance","(.*):.*") > 1
+    for: 15s
+    labels:
+      metric_full_name: linux_cpu_usage
+      metric_id: "6"
+      scope: global
+      version: "1626852948013684600"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: CPU使用率
+  - alert: linux_cpu_usage__P3
+    expr: label_replace(topk(10,(100 - avg(irate(node_cpu_seconds_total{mode="idle"}[5m]))by
+      (instance) * 100)),"ip","$1","instance","(.*):.*") > 5
+    for: 15s
+    labels:
+      metric_full_name: linux_cpu_usage
+      metric_id: "6"
+      scope: global
+      version: "1626852948013684600"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: CPU使用率

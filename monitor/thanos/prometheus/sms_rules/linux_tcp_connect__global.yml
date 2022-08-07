@@ -1,0 +1,78 @@
+groups:
+- name: linux_tcp_connect__global__1627028832471312600
+  rules:
+  - alert: linux_tcp_connect__P0
+    expr: avg(node_netstat_Tcp_CurrEstab{}) by (instance,project,company,enterprise,environment,server_usage)
+      > 100000
+    for: 0m
+    labels:
+      level_id: "1"
+      level_name: P0
+      metric_full_name: linux_tcp_connect
+      metric_id: "18"
+      scope: global
+      version: "1627028832471312600"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP当前连接数
+  - alert: linux_tcp_connect__P1
+    expr: avg(node_netstat_Tcp_CurrEstab{}) by (instance,project,company,enterprise,environment,server_usage)
+      > 80000
+    for: 0m
+    labels:
+      level_id: "2"
+      level_name: P1
+      metric_full_name: linux_tcp_connect
+      metric_id: "18"
+      scope: global
+      version: "1627028832471312600"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP当前连接数
+  - alert: linux_tcp_connect__P2
+    expr: avg(node_netstat_Tcp_CurrEstab{}) by (instance,project,company,enterprise,environment,server_usage)
+      > 60000
+    for: 0m
+    labels:
+      level_id: "3"
+      level_name: P2
+      metric_full_name: linux_tcp_connect
+      metric_id: "18"
+      scope: global
+      version: "1627028832471312600"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP当前连接数
+  - alert: linux_tcp_connect__P3
+    expr: avg(node_netstat_Tcp_CurrEstab{}) by (instance,project,company,enterprise,environment,server_usage)
+      > 40000
+    for: 0m
+    labels:
+      level_id: "4"
+      level_name: P3
+      metric_full_name: linux_tcp_connect
+      metric_id: "18"
+      scope: global
+      version: "1627028832471312600"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP当前连接数
+  - alert: linux_tcp_connect__P4
+    expr: avg(node_netstat_Tcp_CurrEstab{}) by (instance,project,company,enterprise,environment,server_usage)
+      > 20000
+    for: 0m
+    labels:
+      level_id: "5"
+      level_name: P4
+      metric_full_name: linux_tcp_connect
+      metric_id: "18"
+      scope: global
+      version: "1627028832471312600"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP当前连接数

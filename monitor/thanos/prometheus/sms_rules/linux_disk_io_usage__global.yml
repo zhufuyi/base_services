@@ -1,0 +1,83 @@
+groups:
+- name: linux_disk_io_usage__global__1627028004576117500
+  rules:
+  - alert: linux_disk_io_usage__P0
+    expr: avg(irate(node_disk_io_time_seconds_total{}[1m])) by(instance,project,company,enterprise,environment,server_usage)*
+      100 > 90
+    for: 0m
+    labels:
+      level_id: "1"
+      level_name: P0
+      metric_full_name: linux_disk_io_usage
+      metric_id: "10"
+      scope: global
+      unit: '%'
+      version: "1627028004576117500"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: 磁盘IO总线使用率
+  - alert: linux_disk_io_usage__P1
+    expr: avg(irate(node_disk_io_time_seconds_total{}[1m])) by(instance,project,company,enterprise,environment,server_usage)*
+      100 > 85
+    for: 0m
+    labels:
+      level_id: "2"
+      level_name: P1
+      metric_full_name: linux_disk_io_usage
+      metric_id: "10"
+      scope: global
+      unit: '%'
+      version: "1627028004576117500"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: 磁盘IO总线使用率
+  - alert: linux_disk_io_usage__P2
+    expr: avg(irate(node_disk_io_time_seconds_total{}[1m])) by(instance,project,company,enterprise,environment,server_usage)*
+      100 > 80
+    for: 0m
+    labels:
+      level_id: "3"
+      level_name: P2
+      metric_full_name: linux_disk_io_usage
+      metric_id: "10"
+      scope: global
+      unit: '%'
+      version: "1627028004576117500"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: 磁盘IO总线使用率
+  - alert: linux_disk_io_usage__P3
+    expr: avg(irate(node_disk_io_time_seconds_total{}[1m])) by(instance,project,company,enterprise,environment,server_usage)*
+      100 > 75
+    for: 0m
+    labels:
+      level_id: "4"
+      level_name: P3
+      metric_full_name: linux_disk_io_usage
+      metric_id: "10"
+      scope: global
+      unit: '%'
+      version: "1627028004576117500"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: 磁盘IO总线使用率
+  - alert: linux_disk_io_usage__P4
+    expr: avg(irate(node_disk_io_time_seconds_total{}[1m])) by(instance,project,company,enterprise,environment,server_usage)*
+      100 > 70
+    for: 0m
+    labels:
+      level_id: "5"
+      level_name: P4
+      metric_full_name: linux_disk_io_usage
+      metric_id: "10"
+      scope: global
+      unit: '%'
+      version: "1627028004576117500"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: 磁盘IO总线使用率

@@ -1,0 +1,315 @@
+# my global config
+global:
+  scrape_interval: 30s  # By default, scrape targets every 15 seconds.
+  evaluation_interval: 30s  # By default, scrape targets every 15 seconds.
+  # scrape_timeout is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    cluster: 'shenzhen'
+    replica: 'r1'
+
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+#rule_files:
+  #- 'alert.rules'
+  # - "first.rules"
+  # - "second.rules"
+
+# alert
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets:
+            - 'alertmanager:9093'
+            - '192.168.6.169:8080'
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>`
+  # to any timeseries scraped from this config.
+
+  - job_name: 'prometheus'
+
+    # Override the global default and
+    # scrape targets from this job every 5 seconds.
+#    scrape_interval: 5s
+
+    static_configs:
+      #- targets: ['prometheus-3:9090', 'prometheus-4:9090']
+      - targets: ['prometheus-3:9090']
+
+  - job_name: 'thanos'
+
+    # Override the global default and
+    # scrape targets from this job every 5 seconds.
+#    scrape_interval: 5s
+
+    static_configs:
+      - targets:
+          - 'thanos-sidecar-3:10902'
+#          - 'thanos-sidecar-4:10902'
+          - 'thanos-querier:10902'
+          - 'thanos-store-gateway:10902'
+          - 'thanos-compactor:10902'
+          - 'thanos-ruler:10902'
+
+  - job_name: 'minio'
+
+    # Override the global default
+    # and scrape targets from this job every 5 seconds.
+#    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['minio:9000']
+
+    metrics_path: /minio/prometheus/metrics
+
+  - job_name: 'cadvisor'
+
+    # Override the global default
+    # and scrape targets from this job every 5 seconds.
+#    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['cadvisor:8080']
+
+  - job_name: 'node-exporter'
+
+    # Override the global default
+    # and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['192.168.7.76:9100','10.201.0.13:9100']
+        labels:
+          customer_id: '22'
+          company: 'deepexi'
+          enterprise: '2048'
+          environment: 'dev'
+          project: 'inner'
+          server_usage: 'all'
+
+#  - job_name: "windows-exporter"
+#    scrape_interval: 5s
+#    file_sd_configs:
+#    - refresh_interval: 30s
+#      files:
+#        - "/etc/prometheus/conf.d/windows-exporter/*.yml"
+
+#  - job_name: "node-exporter"
+#    scrape_interval: 5s
+#    file_sd_configs:
+#    - refresh_interval: 30s
+#      files:
+#      - "/etc/prometheus/conf.d/node-exporter/*.yml"
+
+
+
+#  - job_name: 'oracle-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.32:9161']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'mongodb-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.76:9216','10.201.0.13:9216']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'SQLServer-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.32:4000']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'postgres-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.31:9187']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'elasticsearch-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.31:9114']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+  - job_name: 'mysql-exporter'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['192.168.7.30:9104']
+        labels:
+          customer_id: '22'
+          company: 'deepexi'
+          enterprise: '2048'
+          environment: 'dev'
+          project: 'inner'
+          server_usage: 'all'
+   
+#  - job_name: 'linux-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.30:9100']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+   
+#  - job_name: 'windows-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.70:9182']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+   
+  - job_name: 'redis-exporter'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['192.168.7.31:9121']
+        labels:
+          customer_id: '22'
+          company: 'deepexi'
+          enterprise: '2048'
+          environment: 'dev'
+          project: 'inner'
+          server_usage: 'all'
+   
+#  - job_name: 'rabbitmq-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.31:9090']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+    
+#  - job_name: 'rocketmq-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.31:5557']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+    
+#  - job_name: 'apache-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.32:9117']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'zookeeper-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.31:9141']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'kafka-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.31:9308']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'canal-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.32:11112']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'nacos-exporter'
+#    scrape_interval: 15s
+#    metrics_path: "/nacos/actuator/prometheus"
+#    static_configs:
+#      - targets: ['192.168.7.32:8848']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'nginx-exporter'
+#    scrape_interval: 15s
+#    static_configs:
+#      - targets: ['192.168.7.32:9113']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+

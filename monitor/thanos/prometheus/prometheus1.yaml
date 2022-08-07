@@ -1,0 +1,234 @@
+# my global config
+global:
+  scrape_interval: 30s  # By default, scrape targets every 15 seconds.
+  evaluation_interval: 30s  # By default, scrape targets every 15 seconds.
+  # scrape_timeout is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    region: 'guangzhou'
+    replica: 'r1'
+
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+rule_files:
+  #- 'alert.rules'
+  #- 'rules.d/*.rules'
+  #- 'sms_rules/*.yml'
+
+# alert
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets:
+            #- 'alertmanager:9093'
+            - '192.168.6.169:8080'
+            - '192.168.6.169:20011'
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>`
+  # to any timeseries scraped from this config.
+
+  - job_name: 'prometheus'
+
+    # Override the global default and
+    # scrape targets from this job every 5 seconds.
+#    scrape_interval: 5s
+
+    static_configs:
+      #- targets: ['prometheus-1:9090', 'prometheus-2:9090']
+      - targets: ['prometheus-1:9090']
+
+  - job_name: 'thanos'
+
+    # Override the global default and
+    # scrape targets from this job every 5 seconds.
+#    scrape_interval: 5s
+
+    static_configs:
+      - targets:
+          - 'thanos-sidecar-1:10902'
+#          - 'thanos-sidecar-2:10902'
+          - 'thanos-querier:10902'
+          - 'thanos-store-gateway:10902'
+          - 'thanos-compactor:10902'
+          - 'thanos-ruler:10902'
+
+  - job_name: 'minio'
+
+    # Override the global default
+    # and scrape targets from this job every 5 seconds.
+#    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['minio:9000']
+
+    metrics_path: /minio/prometheus/metrics
+
+  - job_name: 'cadvisor'
+    scrape_interval: 60s
+    static_configs:
+      #- targets: ['cadvisor:8080']
+      - targets: ['192.168.111.128:9192']
+
+  - job_name: 'mysql-exporter'
+#    scrape_interval: 15s
+    static_configs:
+      - targets: ['192.168.111.128:9104']
+        labels:
+          customer_id: '22'
+          company: 'deepexi'
+          enterprise: '2048'
+          environment: 'dev'
+          project: 'inner'
+          server_usage: 'all'
+
+  - job_name: 'process-exporter'
+#    scrape_interval: 5s
+    static_configs:
+      - targets: ['192.168.111.128:9256']
+        labels:
+          customer_id: '22'
+          company: 'deepexi'
+          enterprise: '2048'
+          environment: 'dev'
+          project: 'inner'
+          server_usage: 'all'
+
+#  - job_name: 'blackbox-exporter'
+#    scrape_interval: 5s
+#    static_configs:
+#      - targets: ['192.168.111.128:9115']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+  - job_name: 'blackbox-exporter'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://www.baidu.com
+        - http://myexample.com:8080
+        - https://prometheus.io
+        - https://zhuyasen.com
+        - https://poc-sms.deepexi.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.111.128:9115  # The blackbox exporter's real hostname:port.
+
+
+  - job_name: 'cdh-exporter'
+#    scrape_interval: 5s
+    static_configs:
+      - targets: ['192.168.111.128:9198']
+        labels:
+          customer_id: '22'
+          company: 'deepexi'
+          enterprise: '2048'
+          environment: 'dev'
+          project: 'inner'
+          server_usage: 'all'
+
+
+  - job_name: 'redis-exporter'
+#    scrape_interval: 5s
+    static_configs:
+      - targets: ['192.168.111.128:9121','192.168.111.128:9122']
+        labels:
+          customer_id: '22'
+          company: 'deepexi'
+          enterprise: '2048'
+          environment: 'dev'
+          project: 'inner'
+          server_usage: 'all'
+
+#  - job_name: 'windows-exporter'
+#    scrape_interval: 5s
+#    static_configs:
+#      - targets: ['192.168.6.169:9182']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'rabbitmq-exporter'
+#    scrape_interval: 5s
+#    static_configs:
+#      - targets: ['192.168.7.76:9419','192.168.111.128:9419']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'kafka-exporter'
+#    scrape_interval: 5s
+#    static_configs:
+#      - targets: ['10.201.0.112:9308']
+#        labels:
+#          customer_id: '22'
+#          company: 'deepexi'
+#          enterprise: '2048'
+#          environment: 'dev'
+#          project: 'inner'
+#          server_usage: 'all'
+
+#  - job_name: 'cloudera-exporter'
+#    scrape_interval: 5s
+#    static_configs:
+#      - targets: ['192.168.111.128:9229']
+
+  - job_name: 'node-exporter'
+
+    # Override the global default
+    # and scrape targets from this job every 5 seconds.
+#    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['192.168.111.128:9100','192.168.7.44:9100','192.168.7.45:9100','192.168.7.46:9100','192.168.7.92:9100']
+        labels:
+          project: 'my-app'
+          environment: 'dev'
+          server_usage: 'all'
+
+    #metric_relabel_configs:
+    #  - source_labels: [job]
+    #    regex: 'node-exporter.*'
+    #    target_label: 'ProjectCode'
+    #    replacement: '1'
+    #  - source_labels: [job]
+    #    regex: 'node-exporter.*'
+    #    target_label: 'serverNO'
+    #    replacement: 'CRS02066'
+
+#  - job_name: "windows-exporter"
+#    file_sd_configs:
+#    - refresh_interval: 1m
+#      files: 
+#      - "/etc/prometheus/conf.d/windows-exporter/*.yml"
+
+#  - job_name: "node-exporter-2"
+#    file_sd_configs:
+#    - refresh_interval: 1m
+#      files: 
+      #- "/etc/prometheus/conf.d/node-exporter/*.yml"
+      #- "conf.d/node-exporter/*.yml "
+

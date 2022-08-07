@@ -1,0 +1,37 @@
+groups:
+- name: node_group2
+  rules:
+
+  - alert: disk_alert_P2
+    expr: (1 - (node_filesystem_free_bytes{fstype=~"ext4|xfs",mountpoint="/"}/node_filesystem_size_bytes {fstype=~"ext4|xfs",mountpoint="/"})) > 0.5
+    for: 0m
+    labels:
+      severity: warning
+      alarmLevel: P2
+      metricName: linux_disk_usage
+    annotations:
+      summary: "Instance {{ $labels.instance }} DISK usage > 0.5"
+      value: "{{ $value }}"
+
+  - alert: disk_alert_P1
+    expr: (1 - (node_filesystem_free_bytes{fstype=~"ext4|xfs",mountpoint="/"}/node_filesystem_size_bytes {fstype=~"ext4|xfs",mountpoint="/"})) > 0.6
+    for: 1m
+    labels:
+      severity: warning
+      alarmLevel: P1
+      metricName: linux_disk_usage
+    annotations:
+      summary: "Instance {{ $labels.instance }} DISK usage > 0.6"
+      value: "{{ $value }}"
+
+  - alert: disk_alert_P0
+    expr: (1 - (node_filesystem_free_bytes{fstype=~"ext4|xfs",mountpoint="/"}/node_filesystem_size_bytes {fstype=~"ext4|xfs",mountpoint="/"})) > 0.9
+    for: 1m
+    labels:
+      severity: warning
+      alarmLevel: P0
+      metricName: linux_disk_usage
+    annotations:
+      summary: "Instance {{ $labels.instance }} DISK usage > 0.9"
+      value: "{{ $value }}"
+

@@ -1,0 +1,42 @@
+groups:
+- name: node_group
+  rules:
+
+  - alert: cpu_load1_P2
+    # expr: node_load1 > 1
+    #expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m]))*100) > 15
+    expr: 100 - avg(rate(node_cpu_seconds_total{mode="idle"}[2m])) by (instance,project,company,enterprise,environment,server_usage)*100 > 15
+    for: 0m
+    labels:
+      severity: warning
+      alarmLevel: P2
+      metricName: linux_cpu_usage
+    annotations:
+      summary: "{{ $labels.instance }}"
+      value: "{{ $value }}"
+      description: '100 - avg(rate(node_cpu_seconds_total{mode="idle"}[2m])) by (instance,project,company,enterprise,environment,server_usage)*100 > 15'
+
+  - alert: cpu_load1_P1
+    #expr: node_load1 > 1.5
+    expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m]))*100) > 20
+    for: 0m
+    labels:
+      severity: warning
+      alarmLevel: P1
+      metricName: linux_cpu_usage
+    annotations:
+      summary: "实例 {{ $labels.instance }} 平均负载 > 20"
+      value: "{{ $labels.instance }}->{{ $value }}"
+
+  - alert: cpu_load1_P0
+    #expr: node_load1 > 2
+    expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m]))*100) > 90
+    for: 0m
+    labels:
+      severity: warning
+      alarmLevel: P0
+      metricName: linux_cpu_usage
+    annotations:
+      summary: "实例 {{ $labels.instance }} 平均负载 > 90"
+      value: "{{ $labels.instance }}->{{ $value }}"
+

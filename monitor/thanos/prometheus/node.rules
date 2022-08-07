@@ -1,0 +1,98 @@
+groups:
+- name: example
+  rules:
+
+  # Alert for any instance that is unreachable for >2 minutes.
+  #- alert: service_down
+  #  expr: up == 0
+  #  for: 2m
+  #  labels:
+  #    severity: page
+  #  annotations:
+  #    summary: "Instance {{ $labels.instance }} down"
+  #    description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 2 minutes."
+
+  #- alert: high_load
+  #  expr: node_load1 > 0.5
+  #  for: 2m
+  #  labels:
+  #    severity: page
+  #  annotations:
+  #    summary: "Instance {{ $labels.instance }} under high load"
+  #    description: "{{ $labels.instance }} of job {{ $labels.job }} is under high load. (current value: {{ $value }})"
+
+
+#- name: hostUsageRate
+#  rules:
+
+  - alert: hostCpuUsageAlert
+    expr: sum(avg without (cpu)(irate(node_cpu_seconds_total{mode!='idle'}[5m]))) by (instance) > 0.6
+    for: 1m
+    labels:
+      severity: critical
+      priority: 3
+      fid: 1
+    annotations:
+      summary: "Instance {{ $labels.job }} CPU usgae high"
+      description: "{{ $labels.instance }} CPU usage above 60% (current value: {{ $value }})"
+      value: "{{ $value }}"
+
+  - alert: hostMemUsageAlert
+    expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.8
+    for: 1m
+    labels:
+      severity: critical
+      priority: 4
+      fid: 2
+    annotations:
+      summary: "Instance {{ $labels.instance }} MEM usgae high"
+      description: "{{ $labels.instance }} MEM usage above 80% (current value: {{ $value }})"
+      value: "{{ $value }}"
+
+  - alert: hostLoad
+    expr: node_load1 >=1
+    for: 1m
+    labels:
+      severity: warning
+      fid: 3
+      priority: 4
+    annotations:
+      summary: "实例 {{ $labels.instance }} 1 分钟负载过高，大于50(当前的值: {{ $value }})"
+      description: "{{ $labels.instance }} 1 分钟负载大于50(当前的值: {{ $value }})"
+
+  - alert: hostDiskUsageAlert
+    expr: (node_filesystem_free_bytes{fstype=~"ext4|xfs"}/node_filesystem_size_bytes {fstype=~"ext4|xfs"}) > 0.8 
+    for: 1m
+    labels:
+      severity: warning
+      fid: 4
+      priority: 4
+    annotations:
+      summary: "Instance {{ $labels.instance }} DISK usgae high"
+      description: "{{ $labels.instance }} DISK usage above 80% (current value: {{ $value }})"
+      value: "{{ $value }}"
+
+  - alert: networkInflowAlert
+    expr: ((sum(rate (node_network_receive_bytes_total{device!~'tap.*|veth.*|br.*|docker.*|virbr*|lo*'}[2m])) by (instance)) / 100) > 102400
+    for: 1m
+    labels:
+      severity: warning
+      fid: 6
+      priority: 4
+    annotations:
+      summary: "Instance {{ $labels.instance }} bandwidth of inflow network is too high"
+      description: "{{ $labels.instance }} outflow network bandwidth lasts for 2 minutes, higher than 100m bandwidth utilization rate (current value: {{ $value }})"
+      value: "{{ $value }}"
+
+  - alert: networkOutflowAlert
+    expr: ((sum(rate (node_network_transmit_bytes_total{device!~'tap.*|veth.*|br.*|docker.*|virbr*|lo*'}[2m])) by (instance)) / 100) > 102400
+    for: 1m
+    labels:
+      severity: warning
+      fid: 7
+      priority: 4
+    annotations:
+      summary: "Instance {{ $labels.instance }} bandwidth of outflow network is too high"
+      description: "{{ $labels.instance }} outflow network bandwidth lasts for 2 minutes, higher than 100m bandwidth utilization rate (current value: {{ $value }})"
+      value: "{{ $value }}"
+

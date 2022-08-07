@@ -1,0 +1,88 @@
+groups:
+- name: linux_tcp_pack_error__global__1627028731067201300
+  rules:
+  - alert: linux_tcp_pack_error__P0
+    expr: (avg(irate(node_netstat_Tcp_InErrs{}[1m])) by (instance,project,company,enterprise,environment,server_usage))
+      / avg(irate(node_netstat_Tcp_InSegs{}[1m])) by (instance,project,company,enterprise,environment,server_usage)
+      > 90
+    for: 0m
+    labels:
+      level_id: "1"
+      level_name: P0
+      metric_full_name: linux_tcp_pack_error
+      metric_id: "17"
+      scope: global
+      unit: '%'
+      version: "1627028731067201300"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP网络包错误率
+  - alert: linux_tcp_pack_error__P1
+    expr: (avg(irate(node_netstat_Tcp_InErrs{}[1m])) by (instance,project,company,enterprise,environment,server_usage))
+      / avg(irate(node_netstat_Tcp_InSegs{}[1m])) by (instance,project,company,enterprise,environment,server_usage)
+      > 70
+    for: 0m
+    labels:
+      level_id: "2"
+      level_name: P1
+      metric_full_name: linux_tcp_pack_error
+      metric_id: "17"
+      scope: global
+      unit: '%'
+      version: "1627028731067201300"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP网络包错误率
+  - alert: linux_tcp_pack_error__P2
+    expr: (avg(irate(node_netstat_Tcp_InErrs{}[1m])) by (instance,project,company,enterprise,environment,server_usage))
+      / avg(irate(node_netstat_Tcp_InSegs{}[1m])) by (instance,project,company,enterprise,environment,server_usage)
+      > 50
+    for: 0m
+    labels:
+      level_id: "3"
+      level_name: P2
+      metric_full_name: linux_tcp_pack_error
+      metric_id: "17"
+      scope: global
+      unit: '%'
+      version: "1627028731067201300"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP网络包错误率
+  - alert: linux_tcp_pack_error__P3
+    expr: (avg(irate(node_netstat_Tcp_InErrs{}[1m])) by (instance,project,company,enterprise,environment,server_usage))
+      / avg(irate(node_netstat_Tcp_InSegs{}[1m])) by (instance,project,company,enterprise,environment,server_usage)
+      > 30
+    for: 0m
+    labels:
+      level_id: "4"
+      level_name: P3
+      metric_full_name: linux_tcp_pack_error
+      metric_id: "17"
+      scope: global
+      unit: '%'
+      version: "1627028731067201300"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP网络包错误率
+  - alert: linux_tcp_pack_error__P4
+    expr: (avg(irate(node_netstat_Tcp_InErrs{}[1m])) by (instance,project,company,enterprise,environment,server_usage))
+      / avg(irate(node_netstat_Tcp_InSegs{}[1m])) by (instance,project,company,enterprise,environment,server_usage)
+      > 10
+    for: 0m
+    labels:
+      level_id: "5"
+      level_name: P4
+      metric_full_name: linux_tcp_pack_error
+      metric_id: "17"
+      scope: global
+      unit: '%'
+      version: "1627028731067201300"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP网络包错误率

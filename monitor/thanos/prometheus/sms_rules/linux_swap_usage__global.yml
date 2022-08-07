@@ -1,0 +1,63 @@
+groups:
+- name: linux_swap_usage__global__1627027714429629400
+  rules:
+  - alert: linux_swap_usage__P2
+    expr: avg((node_memory_SwapTotal_bytes{}-node_memory_SwapFree_bytes{})/1024/1024/1024)
+      by (instance,project,company,enterprise,environment,server_usage) > 6
+    for: 0m
+    labels:
+      level_id: "3"
+      level_name: P2
+      metric_full_name: linux_swap_usage
+      metric_id: "13"
+      scope: global
+      version: "1627027714429629400"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: SWAP交换分区使用
+  - alert: linux_swap_usage__P3
+    expr: avg((node_memory_SwapTotal_bytes{}-node_memory_SwapFree_bytes{})/1024/1024/1024)
+      by (instance,project,company,enterprise,environment,server_usage) > 4
+    for: 0m
+    labels:
+      level_id: "4"
+      level_name: P3
+      metric_full_name: linux_swap_usage
+      metric_id: "13"
+      scope: global
+      version: "1627027714429629400"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: SWAP交换分区使用
+  - alert: linux_swap_usage__P0
+    expr: avg((node_memory_SwapTotal_bytes{}-node_memory_SwapFree_bytes{})/1024/1024/1024)
+      by (instance,project,company,enterprise,environment,server_usage) > 10
+    for: 0m
+    labels:
+      level_id: "1"
+      level_name: P0
+      metric_full_name: linux_swap_usage
+      metric_id: "13"
+      scope: global
+      version: "1627027714429629400"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: SWAP交换分区使用
+  - alert: linux_swap_usage__P1
+    expr: avg((node_memory_SwapTotal_bytes{}-node_memory_SwapFree_bytes{})/1024/1024/1024)
+      by (instance,project,company,enterprise,environment,server_usage) > 8
+    for: 0m
+    labels:
+      level_id: "2"
+      level_name: P1
+      metric_full_name: linux_swap_usage
+      metric_id: "13"
+      scope: global
+      version: "1627027714429629400"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: SWAP交换分区使用

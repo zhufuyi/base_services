@@ -1,0 +1,78 @@
+groups:
+- name: linux_network_input__global__1627028465015798200
+  rules:
+  - alert: linux_network_input__P3
+    expr: sum(irate(node_network_receive_bytes_total{device!~"tap.*|veth.*|br.*|docker.*|virbr*|lo*"}[1m])*8/1024/1024)
+      by (instance,project,company,enterprise,environment,server_usage) > 80
+    for: 0m
+    labels:
+      level_id: "4"
+      level_name: P3
+      metric_full_name: linux_network_input
+      metric_id: "15"
+      scope: global
+      version: "1627028465015798200"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: 网络流入速度
+  - alert: linux_network_input__P4
+    expr: sum(irate(node_network_receive_bytes_total{device!~"tap.*|veth.*|br.*|docker.*|virbr*|lo*"}[1m])*8/1024/1024)
+      by (instance,project,company,enterprise,environment,server_usage) > 40
+    for: 0m
+    labels:
+      level_id: "5"
+      level_name: P4
+      metric_full_name: linux_network_input
+      metric_id: "15"
+      scope: global
+      version: "1627028465015798200"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: 网络流入速度
+  - alert: linux_network_input__P0
+    expr: sum(irate(node_network_receive_bytes_total{device!~"tap.*|veth.*|br.*|docker.*|virbr*|lo*"}[1m])*8/1024/1024)
+      by (instance,project,company,enterprise,environment,server_usage) > 200
+    for: 0m
+    labels:
+      level_id: "1"
+      level_name: P0
+      metric_full_name: linux_network_input
+      metric_id: "15"
+      scope: global
+      version: "1627028465015798200"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: 网络流入速度
+  - alert: linux_network_input__P1
+    expr: sum(irate(node_network_receive_bytes_total{device!~"tap.*|veth.*|br.*|docker.*|virbr*|lo*"}[1m])*8/1024/1024)
+      by (instance,project,company,enterprise,environment,server_usage) > 160
+    for: 0m
+    labels:
+      level_id: "2"
+      level_name: P1
+      metric_full_name: linux_network_input
+      metric_id: "15"
+      scope: global
+      version: "1627028465015798200"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: 网络流入速度
+  - alert: linux_network_input__P2
+    expr: sum(irate(node_network_receive_bytes_total{device!~"tap.*|veth.*|br.*|docker.*|virbr*|lo*"}[1m])*8/1024/1024)
+      by (instance,project,company,enterprise,environment,server_usage) > 120
+    for: 0m
+    labels:
+      level_id: "3"
+      level_name: P2
+      metric_full_name: linux_network_input
+      metric_id: "15"
+      scope: global
+      version: "1627028465015798200"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: 网络流入速度

@@ -1,0 +1,78 @@
+groups:
+- name: linux_tcp_time_wait__global__1627028911526777200
+  rules:
+  - alert: linux_tcp_time_wait__P0
+    expr: avg(node_sockstat_TCP_tw{}) by (instance,project,company,enterprise,environment,server_usage)
+      > 1000
+    for: 0m
+    labels:
+      level_id: "1"
+      level_name: P0
+      metric_full_name: linux_tcp_time_wait
+      metric_id: "19"
+      scope: global
+      version: "1627028911526777200"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP timewait连接数
+  - alert: linux_tcp_time_wait__P1
+    expr: avg(node_sockstat_TCP_tw{}) by (instance,project,company,enterprise,environment,server_usage)
+      > 800
+    for: 0m
+    labels:
+      level_id: "2"
+      level_name: P1
+      metric_full_name: linux_tcp_time_wait
+      metric_id: "19"
+      scope: global
+      version: "1627028911526777200"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP timewait连接数
+  - alert: linux_tcp_time_wait__P2
+    expr: avg(node_sockstat_TCP_tw{}) by (instance,project,company,enterprise,environment,server_usage)
+      > 600
+    for: 0m
+    labels:
+      level_id: "3"
+      level_name: P2
+      metric_full_name: linux_tcp_time_wait
+      metric_id: "19"
+      scope: global
+      version: "1627028911526777200"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP timewait连接数
+  - alert: linux_tcp_time_wait__P3
+    expr: avg(node_sockstat_TCP_tw{}) by (instance,project,company,enterprise,environment,server_usage)
+      > 400
+    for: 0m
+    labels:
+      level_id: "4"
+      level_name: P3
+      metric_full_name: linux_tcp_time_wait
+      metric_id: "19"
+      scope: global
+      version: "1627028911526777200"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP timewait连接数
+  - alert: linux_tcp_time_wait__P4
+    expr: avg(node_sockstat_TCP_tw{}) by (instance,project,company,enterprise,environment,server_usage)
+      > 200
+    for: 0m
+    labels:
+      level_id: "5"
+      level_name: P4
+      metric_full_name: linux_tcp_time_wait
+      metric_id: "19"
+      scope: global
+      version: "1627028911526777200"
+    annotations:
+      summary: '{{ $labels.instance }}'
+      value: '{{ $value }}'
+      description: TCP timewait连接数

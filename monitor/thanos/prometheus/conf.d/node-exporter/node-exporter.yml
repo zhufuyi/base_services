@@ -1,0 +1,10 @@
+- targets: ['node-exporter:9100']
+  labels:
+    customer_id: '22'
+    company: 'deepexi'
+    enterprise: '2048'
+    environment: 'dev'
+    project: 'inner'
+    server_usage: 'all'
+
+
