@@ -1,0 +1,77 @@
+version: "3.7"
+
+services:
+  nginx:
+    image: appsmith/appsmith-editor:v1.7.4
+    container_name: appsmith-editor
+    restart: always
+    env_file: config/docker.env
+    ports:
+      - "3080:80"
+      - "3443:443"
+    volumes:
+      - $PWD/config/nginx_app.conf:/nginx.conf.template/nginx_app.conf
+      - $PWD/data/certbot/conf:/etc/letsencrypt
+      - $PWD/data/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & /start-nginx.sh'"
+    #labels:
+   #   com.centurylinklabs.watchtower.enable: "true"
+    depends_on:
+      - appsmith-internal-server
+    networks:
+      - appsmith
+
+  certbot:
+    image: certbot/certbot:v1.28.0
+    container_name: certbot
+    restart: always
+    volumes:
+      - $PWD/data/certbot/conf:/etc/letsencrypt
+      - $PWD/data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - appsmith
+
+  appsmith-internal-server:
+    image: appsmith/appsmith-server:v1.7.4
+    container_name: appsmith-internal-server
+    restart: always
+    env_file: config/docker.env
+    environment:
+      APPSMITH_ENCRYPTION_PASSWORD: "abcd"
+      APPSMITH_ENCRYPTION_SALT: "abcd"
+      #ports:
+      #- "8080:8080"
+    volumes:
+      - $PWD/data/appsmith/git-storage:/data/git-storage
+    #labels:
+    #  com.centurylinklabs.watchtower.enable: "true"
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - appsmith
+
+  mongo:
+    image: mongo:4.4.6
+    container_name: appsmith-mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_DATABASE=appsmith
+    volumes:
+      - $PWD/config/mongo-init.js:/docker-entrypoint-initdb.d/init.js:ro
+      - $PWD/data/mongo/db:/data/db
+    networks:
+      - appsmith
+
+  redis:
+    image: redis:6.2.6
+    container_name: appsmith-redis
+    restart: always
+    networks:
+      - appsmith
+
+networks:
+  appsmith:
+    driver: bridge
+
