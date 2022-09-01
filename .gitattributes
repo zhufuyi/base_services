@@ -1,0 +1,3 @@
+*.js linguist-language=YAML
+*.html linguist-language=YAML
+*.css linguist-language=YAML
