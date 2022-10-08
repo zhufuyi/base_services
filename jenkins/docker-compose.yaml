@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  jenkins-go:
+    image: zhufuyi/jenkins-go:2.37
+    restart: always
+    container_name: "jenkins-go"
+    ports:
+      - 38080:8080
+    #- 50000:50000
+    volumes:
+      - $PWD/jenkins-volume:/var/jenkins_home
+      # docker配置目录映射
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - /root/.docker/:/root/.docker/
+      # k8s的api配置目录映射，包含config文件
+      - /usr/local/bin/kubectl:/usr/local/bin/kubectl
+      - /root/.kube/:/root/.kube/
+      # 安装其他命令，例如 golangci-lint
