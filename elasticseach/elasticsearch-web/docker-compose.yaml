@@ -1,0 +1,10 @@
+version: '3.1'
+
+services:
+    grafana:
+        image: lmenezes/cerebro:0.9.4
+        container_name: elasticsearch-ui
+        restart: always
+        ports:
+            - 19200:9000
+
