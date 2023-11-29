@@ -1,30 +1,34 @@
-version: '3.3'
+version: '3'
+
 services:
-  yapi:
-    image: mrjin/yapi:latest
-    container_name: yapi
+  yapi-web:
+    image: jayfong/yapi-x:latest
+    container_name: yapi-web
     restart: always
-    environment:
-      - VERSION=1.10.2
-      - HOME=/home
-      - PORT=3000
-      - ADMIN_EMAIL=admin@admin.com
-      - DB_SERVER=mongo
-      - DB_NAME=yapi
-      - DB_PORT=27017
-    entrypoint: "bash /wait-for-it.sh mongo:27017 -- entrypoint.sh"
-    depends_on:
-      - mongo
     ports:
       - 3000:3000
-    volumes:
-      - $PWD/data/log:/home/log
+    environment:
+      - YAPI_ADMIN_ACCOUNT=admin@admin.com
+      - YAPI_ADMIN_PASSWORD=admin
+      - YAPI_CLOSE_REGISTER=true
+      - YAPI_DB_SERVERNAME=yapi-mongo
+      - YAPI_DB_PORT=27017
+      - YAPI_DB_DATABASE=yapi
+      - YAPI_MAIL_ENABLE=false
+      - YAPI_LDAP_LOGIN_ENABLE=false
+      - YAPI_PLUGINS=[]
+    depends_on:
+      - yapi-mongo
+    links:
+      - yapi-mongo
 
-  mongo:
+  yapi-mongo:
     image: mongo:3.5
-    container_name: mongo
+    #image: mongo:4.4.6
+    container_name: yapi-mongo
     restart: always
-    ports:
-      - 27017:27017
     volumes:
-      - $PWD/data/mongodb:/data/db
+      - ./data/db:/data/db
+    expose:
+      - 27017:27017
+

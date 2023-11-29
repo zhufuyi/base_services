@@ -1,0 +1,14 @@
+version: '3'
+services:
+  dtm:
+    image: yedf/dtm
+    container_name: dtm
+    restart: always
+    volumes:
+      - $PWD/configs/dtm.yml:/app/dtm/configs/dtm.yml
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    command: ["-c", "/app/dtm/configs/dtm.yml"]
+    ports:
+      - '36789:36789'
+      - '36790:36790'
